@@ -279,6 +279,10 @@ else {
 
 #Create App Registration for authenticating calls to the Marketplace API
 if (!($ADApplicationID)) {   
+
+		Write-Host "      🔄 Refreshing Azure access token..."
+		az account get-access-token > $null
+
     Write-Host "🔑 Creating Fulfilment API App Registration"
     try {   
         $ADApplication = az ad app create --only-show-errors --sign-in-audience AzureADMYOrg --display-name "$WebAppNamePrefix-FulfillmentAppReg" | ConvertFrom-Json
@@ -536,9 +540,6 @@ az keyvault secret set --vault-name $KeyVault --name DefaultConnection --value $
 Write-host "      ➡️ Update Firewall"
 az keyvault update --name $KeyVault --resource-group $ResourceGroupForDeployment --default-action Deny --output $azCliOutput
 az keyvault network-rule add --name $KeyVault --resource-group $ResourceGroupForDeployment --vnet-name $VnetName --subnet $WebSubnetName --output $azCliOutput
-
-Write-Host "      🔄 Refreshing Azure access token..."
-az account get-access-token > $null
 
 Write-host "   🔵 App Service Plan"
 Write-host "      ➡️ Create App Service Plan"
