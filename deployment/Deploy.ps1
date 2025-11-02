@@ -279,10 +279,6 @@ else {
 
 #Create App Registration for authenticating calls to the Marketplace API
 if (!($ADApplicationID)) {   
-
-		Write-Host "      🔄 Refreshing Azure access token..."
-		az account get-access-token > $null
-
     Write-Host "🔑 Creating Fulfilment API App Registration"
     try {   
         $ADApplication = az ad app create --only-show-errors --sign-in-audience AzureADMYOrg --display-name "$WebAppNamePrefix-FulfillmentAppReg" | ConvertFrom-Json
