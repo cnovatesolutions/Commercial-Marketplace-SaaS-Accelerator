@@ -537,6 +537,9 @@ Write-host "      ➡️ Update Firewall"
 az keyvault update --name $KeyVault --resource-group $ResourceGroupForDeployment --default-action Deny --output $azCliOutput
 az keyvault network-rule add --name $KeyVault --resource-group $ResourceGroupForDeployment --vnet-name $VnetName --subnet $WebSubnetName --output $azCliOutput
 
+Write-Host "      🔄 Refreshing Azure access token..."
+az account get-access-token > $null
+
 Write-host "   🔵 App Service Plan"
 Write-host "      ➡️ Create App Service Plan"
 az appservice plan create -g $ResourceGroupForDeployment -n $WebAppNameService --sku S1 --output $azCliOutput
