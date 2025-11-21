@@ -5,11 +5,19 @@
 RESOURCE_GROUP = rg-ance-dev-eus2-app-s1-77
 APP_NAME = app-ance-dev-eus2-portal-s1-77
 PROJECT_PATH = ./src/CustomerSite/CustomerSite.csproj
-DB_MIGRATIONS_PROJECT = ./src/DataAccess/DataAccess.csproj
 PUBLISH_DIR = ./Publish/CustomerSite
 ZIP_PATH = ./Publish/CustomerSite.zip
 RUNTIME = win-x86
 CONFIGURATION = Release
+
+ADMIN_RESOURCE_GROUP = $(RESOURCE_GROUP)
+ADMIN_APP_NAME = app-ance-dev-eus2-admin-s1-77
+ADMIN_PROJECT_PATH = ./src/AdminSite/AdminSite.csproj
+ADMIN_PUBLISH_DIR = ./Publish/AdminSite
+ADMIN_ZIP_PATH = ./Publish/AdminSite.zip
+ADMIN_RUNTIME = win-x86
+ADMIN_CONFIGURATION = Release
+
 
 # Default target
 deploy-customer-site: clean build zip push restart
@@ -47,14 +55,6 @@ restart:
 # SaaS Accelerator - AdminSite Deployment
 # ===============================
 
-ADMIN_RESOURCE_GROUP = $(RESOURCE_GROUP)
-ADMIN_APP_NAME = app-ance-dev-eus2-admin-s1-77
-ADMIN_PROJECT_PATH = ./src/AdminSite/AdminSite.csproj
-ADMIN_DB_CONTEXT_PROJECT = ./src/AdminSite # adjust if migrations are in another project
-ADMIN_PUBLISH_DIR = ./Publish/AdminSite
-ADMIN_ZIP_PATH = ./Publish/AdminSite.zip
-ADMIN_RUNTIME = win-x86
-ADMIN_CONFIGURATION = Release
 
 deploy-admin-site: admin-clean admin-build admin-zip admin-push admin-restart
 	@echo "✅ AdminSite Deployment completed successfully!"
@@ -87,7 +87,3 @@ admin-restart:
 	@az webapp restart --resource-group $(ADMIN_RESOURCE_GROUP) --name $(ADMIN_APP_NAME)
 	@echo "✅ AdminSite restarted successfully."
 
-migrate-db:
-	@echo "🗄️  Running EF Core migrations..."
-	@dotnet ef database update --project $(DB_MIGRATIONS_PROJECT)
-	@echo "✅ Database migrated successfully."
